@@ -1,11 +1,11 @@
 # what_to_watch/opinions_app.py
 
 from datetime import datetime
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from random import randrange
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static_dir')
 
 # Подключить БД SQLite.
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -37,7 +37,13 @@ def index_view():
     offset_value = randrange(quantity)
     # ...и определить случайный объект.
     opinion = Opinion.query.offset(offset_value).first()
-    return opinion.text
+    # Вот он — возврат функции.
+    return render_template('index.html', opinion=opinion)
+
+@app.route('/add')
+def add_opinion_view():
+    return 'Страница в разработке!'
+
 
 if __name__ == '__main__':
     app.run()
